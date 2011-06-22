@@ -55,8 +55,17 @@ exports.Package = class Package
       if err then callback err
       else callback null, parts.join("\n")
 
+  compileDependency: (path, callback) =>
+    if @compilers[extname(path).slice(1)]
+      @compileFile path, (err, source) ->
+        if err then callback err
+        else
+          callback null, source
+    else
+      fs.readfile path, callback
+
   compileDependencies: (callback) =>
-    async.map @dependencies, fs.readFile, (err, dependencySources) =>
+    async.map @dependencies, compileDependency, (err, dependencySources) =>
       if err then callback err
       else callback null, dependencySources.join("\n")
 
