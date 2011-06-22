@@ -65,7 +65,7 @@ exports.Package = class Package
       fs.readfile path, callback
 
   compileDependencies: (callback) =>
-    async.map @dependencies, compileDependency, (err, dependencySources) =>
+    async.map @dependencies, @compileDependency, (err, dependencySources) =>
       if err then callback err
       else callback null, dependencySources.join("\n")
 
